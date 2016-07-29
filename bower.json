@@ -1,0 +1,26 @@
+{
+  "name": "home-project",
+  "authors": [
+    "Quay <qhoffman@gmail.com>"
+  ],
+  "description": "the home project",
+  "main": "index.html",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "catiline": "^2.9.3",
+    "gulp": "^3.9.1",
+    "paper-progress": "^1.0.9",
+    "paper-radio-button": "^1.2.0",
+    "platinum-sw": "^1.3.0"
+  }
+}

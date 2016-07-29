@@ -1,0 +1,210 @@
+<link rel="import" href="../bower_components/polymer/polymer.html" />
+<!--<link rel="import" href="../bower_components/firebase-element/firebase-document.html" />-->
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html" />
+<link rel="import" href="../bower_components/paper-input/paper-input.html" />
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html" />
+<link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html" />
+<link rel="import" href="../bower_components/paper-drawer-panel/paper-drawer-panel.html" />
+<link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html" />
+<link rel="import" href="../bower_components/paper-button/paper-button.html" />
+<link rel="import" href="../bower_components/paper-card/paper-card.html" />
+<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html" />
+<!--<link rel="import" href="../bower_components/polymerfire/firebase-app.html" />-->
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html" />
+<!--<link rel="import" href="../bower_components/polymerfire/firebase-query.html" />-->
+<!--neon things-->
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<!--custom things-->
+<link rel="import" href="../elements/console-collection.html">
+
+
+<!--<script src="../bower_components/firebase/firebase.js"></script>-->
+// <script>
+//   // Initialize Firebase
+//   var config = {
+//     apiKey: "AIzaSyBu_Nd9MLO6VT1OdGybqADmb2COTr6Wkz8",
+//     authDomain: "project-144304397906764068.firebaseapp.com",
+//     databaseURL: "https://project-144304397906764068.firebaseio.com",
+//     storageBucket: "project-144304397906764068.appspot.com",
+//   };
+//   firebase.initializeApp(config);
+// </script>
+<dom-module id="app-header">
+    <style>
+        * {
+            font-family: Roboto, Arial;
+        }
+        #header {
+            background: #111;
+            color: #7FD0D0;
+        }
+        paper-header-panel {
+            margin-bottom:10px;
+        }
+        h1 {
+            font-family: Roboto, Arial;
+            color: black;
+            text-align:center;
+            font-size:5vw;
+            transition: color 0.3s;
+            moz-transition: color 0.3s;
+            -webkit-transition: color 0.3s;
+        }
+        h1.goodToGo {
+            color: #2CD02C;
+        }
+        h1.error {
+            color: #BF4E4E;
+        }
+        paper-input {
+            --primary-color: #22A0A0;
+            --invalid-color:#BF4E4E
+        }
+        gold-email-input {
+            --primary-color: #22A0A0;
+            --invalid-color:#BF4E4E
+        }
+        #background {
+            background: #000000
+            width: 100%;
+            height:100%;
+        }
+        #buttonDiv {
+            text-align:center;
+        }
+        .loginButton {
+            background: #222222;
+            color: #FFFFFF;
+            transition: background 0.3s;
+            moz-transition: background 0.3s;
+            -webkit-transition: background 0.3s;
+        }
+        .loginButton:hover {
+            background: #22A0A0;
+        }
+        #signInOutButton {
+            margin-left:20px;
+            background:#FF9136;
+            color:black;
+        }
+        #headerHome {
+            text-decoration:none;
+            color:#7FD0D0;
+            margin-left:20px;
+        }
+    </style>
+    <template>
+        <paper-header-panel>
+            <paper-toolbar id="header">
+                <div class="title">qoHo.me</div>
+                <div>{{page_title}}</div>
+                <div><a href="https://www.qoho.me"><iron-icon id="headerHome" icon="home"></a></iron-icon></div>
+                <div><paper-button id="signInOutButton" on-click="signInClicked">{{signInOutText}}</paper-button></div>
+            </paper-toolbar>
+        </paper-header-panel>
+       <paper-dialog id="loginDialog" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+            <div>
+                <h1 class$="{{headerClass}}" >Login</h1>
+                <gold-email-input id="emailInput" value="{{emailAddress}}"></gold-email-input>
+                <paper-input id="passwordInput" label="Password" type="password" value="{{password}}" on-keyup="enterPressed"></paper-input>
+                <div id="buttonDiv">
+                    <paper-button class="loginButton" on-tap="logIn">Login</paper-button>
+                </div>
+            </div>
+        </paper-dialog>
+       <paper-dialog id="signOutDialog" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+            <div>
+                <h1 class$="{{headerClass}}" >Sign Out</h1>
+                <p>Sign out of qoHo?</p>
+                <div id="buttonDiv">
+                    <paper-button class="loginButton" on-tap="logOut">Sign Out</paper-button>
+                </div>
+            </div>
+        </paper-dialog>
+        <firebase-app auth-domain="project-144304397906764068.firebaseapp.com"
+          database-url="https://project-144304397906764068.firebaseio.com"
+          api-key="AIzaSyBu_Nd9MLO6VT1OdGybqADmb2COTr6Wkz8">
+        </firebase-app>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: "app-header",
+        properties: {
+            page_title: {
+                type:Object
+            },
+            signInOutText: {
+                type: String,
+                value: "Verifying"
+            }
+        },
+        observers: ['logUser(user)'],
+        ready: function () {
+            var auth = firebase.auth();
+            auth.onAuthStateChanged(function(user) {
+              if (user) {
+                // User signed in!
+                this.set('signInOutText', "Sign Out");
+                console.log("have auth");
+                var uid = user.uid;
+              } else {
+                  this.set('signInOutText', "Sign In");
+                  console.log("no auth");
+                // User logged out
+              }
+            }.bind(this));
+            // onAuthStateChanged(function () {
+            //     consol.log("authstateChanged", firebase.auth().currentUser)
+            // }.bind(this));
+        },
+        goHome: function () {
+            window.location.href = "https://www.qoho.me"
+        },
+        enterPressed: function(e) {
+            if (e.keyCode == 13) {
+                this.logIn();
+            }
+        },
+        signInClicked: function () {
+            if (this.signInOutText === "Sign Out") {
+                this.$.signOutDialog.open()
+            } else {
+                this.$.loginDialog.open();
+            }
+        },
+        logIn: function () {
+            this.$.passwordInput.invalid = false;
+            this.$.emailInput.invalid = false;
+            // var ref = new Firebase("https://project-144304397906764068.firebaseio.com/");
+            firebase.auth().signInWithEmailAndPassword(this.emailAddress, this.password).then(function () {
+                console.log("signed in!")
+                this.headerClass = "goodToGo";
+                this.$.loginDialog.close();
+                // this.async(function () {window.location.href = "../home"}, 500)
+            }.bind(this)).catch(function(error) {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              console.log(error);
+              // [START_EXCLUDE]
+              if (errorCode === 'auth/wrong-password') {
+                this.$.passwordInput.invalid = true;
+                this.$.passwordInput.errorMessage = "Incorrect Password"
+              } else if (errorCode === "auth/user-not-found"){
+                this.$.emailInput.invalid = true;
+                this.$.emailInput.errorMessage = "Invalid Email Address"
+              } else {
+                console.error(error);
+              }
+              // [END_EXCLUDE]
+            }.bind(this));
+        },
+        logOut: function () {
+            this.$.signOutDialog.close();
+            firebase.auth().signOut().then(console.log("signed out"));
+            this.async(function () {window.location.reload()}, 500)
+        },
+    });
+</script>
