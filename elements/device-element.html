@@ -2,7 +2,7 @@
 <!--<link rel="import" href="../bower_components/firebase-element/firebase-document.html" />-->
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html" />
 <link rel="import" href="../bower_components/paper-input/paper-input.html" />
-<link rel="import" href="../bower_components/paper-card/paper-card.html" />
+<!--<link rel="import" href="../bower_components/paper-card/paper-card.html" />-->
 <link rel="import" href="../bower_components/paper-progress/paper-progress.html" />
 <link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html" />
 <link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html" />
@@ -84,6 +84,12 @@
             margin:10px;
         }
         .deviceCard{
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            padding: 16px;
+            margin: 24px;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #757575;
             margin: 0px 10px 10px 10px;
         }
         .toggleDiv {
@@ -114,10 +120,12 @@
             display:flex;
             justify-content:space-between;
             align-items:center;
+            align-content:center;
             margin:0px 10px 0px 10px;
             padding:0px;
         }
         #deviceStatusIndicator {
+            margin-top:10px;
             --paper-radio-button-checked-color: #0E870E;
             --paper-radio-button-checked-ink-color: #0E870E;
             --paper-radio-button-unchecked-color: #0E870E;
@@ -144,7 +152,7 @@
             <!--        </div>-->
             <!--    </div>-->
             <!--</paper-dialog>-->
-        <paper-card class="deviceCard">
+        <div class="deviceCard">
             <div id="deviceHeaderWrapper">
                 <h1 id="deviceHeaderText">{{device_data.name}}</h1>
                 <paper-radio-button id="deviceStatusIndicator" Disabled checked="{{device_data.status.value}}"></paper-radio-button>
@@ -163,7 +171,7 @@
             <!--</div>-->
             </template>
             </div>
-        </paper-card>
+        </div>
     </template>
 </dom-module>
 <script>

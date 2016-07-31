@@ -45,11 +45,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         .isolator {
             width:100%;
+            margin:0px;
             margin-bottom:10px;
         }
     </style>
 
        <div id="background">
+             <firebase-app auth-domain="project-144304397906764068.firebaseapp.com"
+      database-url="https://project-144304397906764068.firebaseio.com"
+      api-key="AIzaSyBu_Nd9MLO6VT1OdGybqADmb2COTr6Wkz8">
+    </firebase-app>
             <firebase-document
               path="/userData/{{userUID}}"
               data="{{userData}}">

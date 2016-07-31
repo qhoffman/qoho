@@ -6,7 +6,7 @@
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html" />
 <!--<link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html" />-->
 <link rel="import" href="../bower_components/paper-button/paper-button.html" />
-<link rel="import" href="../bower_components/paper-card/paper-card.html" />
+<!--<link rel="import" href="../bower_components/paper-card/paper-card.html" />-->
 <link rel="import" href="../bower_components/paper-item/paper-item.html" />
 <link rel="import" href="../bower_components/paper-item/paper-item-body.html" />
 <link rel="import" href="../bower_components/gold-email-input/gold-email-input.html" />
@@ -88,6 +88,14 @@
         #loginButton:hover {
             background: #22A0A0;
         }
+      .card {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        padding: 16px;
+        margin: 24px;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #757575;
+      }
     </style>
     <template>
         <paper-dialog id="createDeviceDialog" modal entry-animation="scale-up-animation" exit-animation="fade-out-animation">
@@ -102,7 +110,7 @@
                 </div>
             </div>
         </paper-dialog>
-        <paper-card>
+        <div class="card">
             <firebase-query
                 path="/collections/[[collection_key]]/devices"
                 data="{{collectionsDevices}}">
@@ -122,7 +130,7 @@
                     </paper-item-body>
                 </paper-item>
             </template>
-        </paper-card>
+        </div>
     </template>
 </dom-module>
 <script>

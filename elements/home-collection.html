@@ -6,9 +6,9 @@
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html" />
 <!--<link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html" />-->
 <link rel="import" href="../bower_components/paper-button/paper-button.html" />
-<link rel="import" href="../bower_components/paper-card/paper-card.html" />
-<link rel="import" href="../bower_components/paper-item/paper-item.html" />
-<link rel="import" href="../bower_components/paper-item/paper-item-body.html" />
+<!--<link rel="import" href="../bower_components/paper-card/paper-card.html" />-->
+<!--<link rel="import" href="../bower_components/paper-item/paper-item.html" />-->
+<!--<link rel="import" href="../bower_components/paper-item/paper-item-body.html" />-->
 <link rel="import" href="../bower_components/gold-email-input/gold-email-input.html" />
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html" />
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html" />
@@ -90,8 +90,9 @@
         }
         #collectionBreaker {
             text-align:left;
-            width:100%;
+            width: calc( 100% - 50px );
             max-width:800px;
+            margin: 10px;
             margin-bottom:10px;
             --paper-card-header-color: #A61111;
             --paper-card-color: #FFF;
@@ -116,6 +117,14 @@
             background: radial-gradient(#22A0A0, #317878); /* Standard syntax */
             border-radius: 0px 0px 4px 4px;
         }
+      .card {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        padding: 16px;
+        margin: 24px;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #757575;
+      }
     </style>
     <template>
         <!--<paper-dialog id="createDeviceDialog" modal entry-animation="scale-up-animation" exit-animation="fade-out-animation">-->
@@ -131,8 +140,9 @@
         <!--    </div>-->
         <!--</paper-dialog>-->
         <div class="collectionWrapper">
-            <paper-card id="collectionBreaker" elevation="2" heading="{{collection_name}}">
+            <div class="card" id="collectionBreaker">
                 <div class="collectionCardWrapper">
+                    <h1>{{collection_name}}</h1>
                     <em>{{collection_desc}}</em>
                     <!--<div style="display:flex; flex-wrap:no-wrap; align-items:center; margin:10px 10px 0px 10px;padding: 0px 0px 10px 0px; border-bottom:1px solid gray">-->
                     <!--    <div>-->
@@ -142,7 +152,7 @@
                     <!--    <paper-fab icon="add" on-click="showCreateDeviceDialog"></paper-fab>-->
                     <!--</div>-->
                 </div>
-            </paper-card>
+            </div>
            <firebase-query
                 path="/collections/[[collection_key]]/devices"
                 data="{{collectionsDevices}}">
