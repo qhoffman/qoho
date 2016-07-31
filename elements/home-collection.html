@@ -31,15 +31,17 @@
 // </script>
 <dom-module id="home-collection">
     <style>
-        h1 {
+        h2 {
             font-family: Roboto, Arial;
-            color: black;
-            text-align:center;
+            color: white;
+            text-align:left;
             /*font-size:5vw;*/
             transition: color 0.3s;
             moz-transition: color 0.3s;
             -webkit-transition: color 0.3s;
-            margin:10px;
+            padding: 0px 5px 0px 5px;
+            margin:10px 10px 0px 10px;
+            border-bottom:1px solid white;
         }
         /*#header {*/
         /*    background:white;*/
@@ -50,12 +52,6 @@
         /*}*/
         paper-fab {
             --paper-fab-background: #FF4C4C
-        }
-        h1.goodToGo {
-            color: #2CD02C;
-        }
-        h1.error {
-            color: #BF4E4E;
         }
         paper-input {
             --primary-color: #22A0A0;
@@ -90,9 +86,9 @@
         }
         #collectionBreaker {
             text-align:left;
-            width: calc( 100% - 50px );
+            width: 100%
             max-width:800px;
-            margin: 10px;
+            margin: 0px;
             margin-bottom:10px;
             --paper-card-header-color: #A61111;
             --paper-card-color: #FFF;
@@ -115,7 +111,12 @@
             background: -o-radial-gradient(#22A0A0, #317878); /* For Opera 11.6 to 12.0 */
             background: -moz-radial-gradient(#22A0A0, #317878); /* For Firefox 3.6 to 15 */
             background: radial-gradient(#22A0A0, #317878); /* Standard syntax */
-            border-radius: 0px 0px 4px 4px;
+            border-radius: 4px 4px 4px 4px;
+        }
+        #collectionWrapperDesc {
+            text-align:right;
+            color:white;
+            margin:0px 15px 0px 0px;
         }
       .card {
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
@@ -140,10 +141,10 @@
         <!--    </div>-->
         <!--</paper-dialog>-->
         <div class="collectionWrapper">
-            <div class="card" id="collectionBreaker">
+            <div id="collectionBreaker">
                 <div class="collectionCardWrapper">
-                    <h1>{{collection_name}}</h1>
-                    <em>{{collection_desc}}</em>
+                    <h2>{{collection_name}}</h2>
+                    <div id="collectionWrapperDesc"><em>{{collection_desc}}</em></div>
                     <!--<div style="display:flex; flex-wrap:no-wrap; align-items:center; margin:10px 10px 0px 10px;padding: 0px 0px 10px 0px; border-bottom:1px solid gray">-->
                     <!--    <div>-->
                     <!--        <h1>{{collection_name}}</h1>-->
