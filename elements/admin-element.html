@@ -1,0 +1,221 @@
+<link rel="import" href="../bower_components/polymer/polymer.html" />
+<!--<link rel="import" href="../bower_components/firebase-element/firebase-document.html" />-->
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html" />
+<link rel="import" href="../bower_components/paper-input/paper-input.html" />
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html" />
+<link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html" />
+<link rel="import" href="../bower_components/paper-button/paper-button.html" />
+<link rel="import" href="../bower_components/paper-card/paper-card.html" />
+<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html" />
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html" />
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html" />
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html" />
+<!--neon things-->
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<!--custom things-->
+<link rel="import" href="../elements/console-collection.html">
+
+
+<script src="../bower_components/firebase/firebase.js"></script>
+// <script>
+//   // Initialize Firebase
+//   var config = {
+//     apiKey: "AIzaSyBu_Nd9MLO6VT1OdGybqADmb2COTr6Wkz8",
+//     authDomain: "project-144304397906764068.firebaseapp.com",
+//     databaseURL: "https://project-144304397906764068.firebaseio.com",
+//     storageBucket: "project-144304397906764068.appspot.com",
+//   };
+//   firebase.initializeApp(config);
+// </script>
+<dom-module id="admin-element">
+    <style>
+        h1 {
+            font-family: Roboto, Arial;
+            color: black;
+            text-align:center;
+            /*font-size:5vw;*/
+            transition: color 0.3s;
+            moz-transition: color 0.3s;
+            -webkit-transition: color 0.3s;
+            margin:10px;
+        }
+        /*#header {*/
+        /*    background:white;*/
+            /*height:30px;*/
+        /*    position:fixed;*/
+        /*    width:100%;*/
+        /*    margin: 0px 0px 20px 0px;*/
+        /*}*/
+        h1.goodToGo {
+            color: #2CD02C;
+        }
+        h1.error {
+            color: #BF4E4E;
+        }
+        paper-input {
+            --primary-color: #22A0A0;
+            --invalid-color:#BF4E4E
+        }
+        gold-email-input {
+            --primary-color: #22A0A0;
+            --invalid-color:#BF4E4E
+        }
+        #background {
+            /*background: #22A0A0;*/
+            /*width: 100%;*/
+            /*height:100%;*/
+            display:flex;
+            width:100%;
+            height:100%;
+            justify-content:space-around;
+            flex-wrap:wrap;
+        }
+        #buttonDiv {
+            text-align:center;
+        }
+        #loginButton {
+            background: #222222;
+            color: #FFFFFF;
+            transition: background 0.3s;
+            moz-transition: background 0.3s;
+            -webkit-transition: background 0.3s;
+        }
+        #loginButton:hover {
+            background: #22A0A0;
+        }
+        .isolator {
+            display:flex;
+            width:100%;
+            justify-content:space-around;
+            flex-wrap:wrap;        
+            margin-bottom:10px;
+        }
+    </style>
+    <template>
+        <!--<paper-header-panel id="header"><div class="paper-header">Header</div></paper-header-panel>-->
+        <!--<firebase-app auth-domain="project-144304397906764068.firebaseapp.com"-->
+        <!--  database-url="https://project-144304397906764068.firebaseio.com"-->
+        <!--  api-key="AIzaSyBu_Nd9MLO6VT1OdGybqADmb2COTr6Wkz8">-->
+        <!--</firebase-app>-->
+        <div id="background">
+            <paper-dialog id="createUserInfoDialog" modal entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+                <div>
+                    <h1 class$="{{headerClass}}" >Create User Info</h1>
+                    <!--<gold-email-input id="emailInput" value="{{emailAddress}}" ></gold-email-input>-->
+                    <paper-input label="User Name"  value="{{userName}}"></paper-input>
+                    <div id="buttonDiv">
+                        <paper-button id="createUserInfoButton" on-tap="createUserInfo" dialog-dismiss>Create User Info</paper-button>
+                    </div>
+                </div>
+            </paper-dialog>
+            <paper-dialog id="createCollectionDialog" modal entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+                <div>
+                    <h1 class$="{{headerClass}}" >Create Collection</h1>
+                    <!--<gold-email-input id="emailInput" value="{{emailAddress}}" ></gold-email-input>-->
+                    <paper-input label="Collection Name"  value="{{newCollectionName}}"></paper-input>
+                    <paper-input label="Collection Description"  value="{{newCollectionDesc}}"></paper-input>
+                    <div id="buttonDiv">
+                        <paper-button id="createCollectionButton" on-tap="createCollection" dialog-dismiss>Create Collection</paper-button>
+                    </div>
+                </div>
+            </paper-dialog>
+            <paper-dialog id="createDeviceDialog" modal entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+                <div>
+                    <h1 class$="{{headerClass}}" >Create Collection</h1>
+                    <!--<gold-email-input id="emailInput" value="{{emailAddress}}" ></gold-email-input>-->
+                    <paper-input label="Device Name" value="{{deviceName}}"></paper-input>
+                    <paper-input label="Device Description" value="{{deviceDesc}}"></paper-input>
+                    <paper-input label="Device Type" value="{{deviceType}}"></paper-input>
+                    <div id="buttonDiv">
+                        <paper-button id="createDeviceButton" on-tap="createDevice" dialog-dismiss>Create Device</paper-button>
+                    </div>
+                </div>
+            </paper-dialog>
+            <div class="isolator">
+                <paper-card heading="Stupid Buttons">
+                    <paper-button on-click="showCreateUserInfoDialog">Add User Data</paper-button>
+                    <paper-button on-click="showCreateCollectionDialog">Add Collection</paper-button>
+                    <paper-button on-click="showCreateDeviceDialog">Add Device</paper-button>
+                </paper-card>
+            </div>
+            <firebase-query
+                path="/userData/[[userUID]]/collections"
+                data="{{collections}}">
+            </firebase-query>
+            <template is="dom-repeat" items="{{collections}}">
+                <console-collection collection_key="{{item.$key}}" collection_name="{{item.name}}" collection_desc="{{item.description}}"></console-collection>
+            </template>
+        </div>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: "admin-element",
+        properties: {
+        },
+        observers: ['logCollections(collections.*)'],
+        ready: function () {
+            this.computeUserDataPath();
+        },
+        logCollections: function () {
+            console.log(this.collections);
+        },
+        computeUserDataPath: function () {
+            // console.log(firebase.auth());
+            if (firebase.auth().currentUser) {
+                this.userUID = firebase.auth().currentUser.uid;
+                // console.log("/userData/"+this.userUID);
+                return;
+            } else {
+                return this.async(function () {this.computeUserDataPath();}, 30);
+            }
+        },
+        showCreateUserInfoDialog: function () {
+            this.$.createUserInfoDialog.open();
+        },
+        showCreateCollectionDialog: function () {
+            this.$.createCollectionDialog.open();
+        },
+        showCreateDeviceDialog: function () {
+            this.$.createDeviceDialog.open();
+        },
+        createUserInfo: function () {
+            var userID = firebase.auth().currentUser.uid;
+            var userInfo = {
+                name: this.userName,
+            }
+            firebase.database().ref().child("userData").child(userID).set(userInfo);
+        },
+        createCollection: function () {
+            var updateData = {
+                name: this.newCollectionName,
+                description: this.newCollectionDesc
+            }
+            
+            var updateObject = {};
+            // set device data at user location:
+            var collectionKey = firebase.database().ref().child("collections").push().key
+            console.log(collectionKey);
+            updateObject["userData/"+this.userUID+"/collections/"+collectionKey] = updateData;
+            updateObject["collections/"+collectionKey] = updateData;
+            firebase.database().ref().update(updateObject);
+        },
+        createDevice: function () {
+            var updateData = {
+                name: this.deviceName,
+                description: this.deviceDesc,
+                type: this.deviceType
+            }
+            
+            var updateObject = {};
+            // set device data at user location:
+            var deviceKey = firebase.database().ref().child("devices").push().key
+            console.log(deviceKey);
+            updateObject["userData/"+firebase.auth().currentUser.uid+"/devices/"+deviceKey] = updateData;
+            updateObject["devices/"+deviceKey] = updateData;
+            console.log(updateObject);
+            firebase.database().ref().update(updateObject);
+        }
+    });
+</script>

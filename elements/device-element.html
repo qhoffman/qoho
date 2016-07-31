@@ -1,0 +1,268 @@
+<link rel="import" href="../bower_components/polymer/polymer.html" />
+<!--<link rel="import" href="../bower_components/firebase-element/firebase-document.html" />-->
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html" />
+<link rel="import" href="../bower_components/paper-input/paper-input.html" />
+<link rel="import" href="../bower_components/paper-card/paper-card.html" />
+<link rel="import" href="../bower_components/paper-progress/paper-progress.html" />
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html" />
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html" />
+<!--<link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html" />-->
+<link rel="import" href="../bower_components/paper-button/paper-button.html" />
+<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html" />
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html" />
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html" />
+<!--neon things-->
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<!--custom things-->
+<link rel="import" href="../elements/home-collection.html">
+
+<script src="../bower_components/firebase/firebase.js"></script>
+<!--<script>-->
+  <!--// Initialize Firebase-->
+<!--  var config = {-->
+<!--    apiKey: "AIzaSyBu_Nd9MLO6VT1OdGybqADmb2COTr6Wkz8",-->
+<!--    authDomain: "project-144304397906764068.firebaseapp.com",-->
+<!--    databaseURL: "https://project-144304397906764068.firebaseio.com",-->
+<!--    storageBucket: "project-144304397906764068.appspot.com",-->
+<!--  };-->
+<!--  firebase.initializeApp(config);-->
+<!--</script>-->
+<dom-module id="device-element">
+    <style>
+         h1 {
+            font-family: Roboto, Arial;
+            color: black;
+            text-align:center;
+            /*font-size:5vw;*/
+            transition: color 0.3s;
+            moz-transition: color 0.3s;
+            -webkit-transition: color 0.3s;
+        }
+        h1.goodToGo {
+            color: #2CD02C;
+        }
+        h1.error {
+            color: #BF4E4E;
+        }
+        paper-input {
+            --primary-color: #22A0A0;
+            --invalid-color:#BF4E4E
+        }
+        gold-email-input {
+            --primary-color: #22A0A0;
+            --invalid-color:#BF4E4E
+        }
+        #background {
+            /*background: #22A0A0;*/
+            /*width: 100%;*/
+            /*height:100%;*/
+            display:flex;
+            width:100%;
+            height:100%;
+            justify-content:space-around;
+            flex-wrap:wrap;
+        }
+        #buttonDiv {
+            text-align:center;
+        }
+        #loginButton {
+            background: #222222;
+            color: #FFFFFF;
+            transition: background 0.3s;
+            moz-transition: background 0.3s;
+            -webkit-transition: background 0.3s;
+        }
+        #loginButton:hover {
+            background: #22A0A0;
+        }
+        .isolator {
+            width:100%;
+            margin-bottom:10px;
+        }
+        #deviceWrapper {
+            margin:10px;
+        }
+        .deviceCard{
+            margin: 0px 10px 10px 10px;
+        }
+        .toggleDiv {
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+        .toggleSpanLabel {
+            padding:5px;
+        }
+        .paperToggle.red {
+            --paper-toggle-button-checked-button-color:#FF3636;
+            --paper-toggle-button-checked-bar-color:#BF4E4E
+        }
+        #deviceProgressBar {
+            width:calc(100% - 20px);
+            margin:0px 0px 0px 10px;
+            --paper-progress-height: 1px;
+            --paper-progress-active-color: #0E870E;
+        }
+        #deviceHeaderText {
+            text-align:left;
+            font-size:18pt;
+            font-weight:lighter;
+            margin-bottom: 5px
+        }
+        #deviceHeaderWrapper {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin:0px 10px 0px 10px;
+            padding:0px;
+        }
+        #deviceStatusIndicator {
+            --paper-radio-button-checked-color: #0E870E;
+            --paper-radio-button-checked-ink-color: #0E870E;
+            --paper-radio-button-unchecked-color: #0E870E;
+            --paper-radio-button-unchecked-ink-color: #0E870E;
+            --paper-radio-button-label-color: #0E870E;
+            --primary-text-color: #0E870E;
+          }
+          .noProgress {
+              opacity: 0;
+              transition: opacity 1s ease-in-out;
+              -webkit-transition: opacity 1s ease-in-out;
+          }
+          .progress {
+              opacity: 1;
+              transition: none;
+              -webkit-transition: none;
+          }
+    </style>
+    <template>
+            <!--<paper-dialog id="selectedDeviceDialog" modal entry-animation="scale-up-animation" exit-animation="fade-out-animation">-->
+            <!--    <div>-->
+            <!--        <div id="buttonDiv">-->
+            <!--            <paper-button dialog-dismiss>Close</paper-button>-->
+            <!--        </div>-->
+            <!--    </div>-->
+            <!--</paper-dialog>-->
+        <paper-card class="deviceCard">
+            <div id="deviceHeaderWrapper">
+                <h1 id="deviceHeaderText">{{device_data.name}}</h1>
+                <paper-radio-button id="deviceStatusIndicator" Disabled checked="{{device_data.status.value}}"></paper-radio-button>
+            </div>
+            <paper-progress id="deviceProgressBar" value="{{device_data.status.progress}}" class$="{{progressClass}}"></paper-progress>
+            <div id="deviceWrapper">  
+            <em>{{device_data.description}}</em>
+            <template is="dom-if" if="{{isBooleanSwitch}}">
+                <div class="toggleDiv"><span class="toggleSpanLabel">OFF</span><paper-toggle-button class="paperToggle red"checked="{{device_data.command}}"></paper-toggle-button><span class="toggleSpanLabel">ON</span></div>
+            <!--<div>-->
+            <!--    <span>Device Status:</span>-->
+            <!--    <div hidden$="{{hideStatusUpdates}}">-->
+            <!--        <span>{{deviceStatus}}</span>-->
+            <!--    </div>-->
+            <!--    <div id="offlineIndicator" hidden$="{{!deviceOffline}}"><em>offline</em></div>-->
+            <!--</div>-->
+            </template>
+            </div>
+        </paper-card>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: "device-element",
+        properties: {
+            device_data: {
+                type: Object,
+                notify: true
+            },
+            device_key: {
+                type: String
+            },
+            collection_key: {
+                type: String
+            },
+            progressClass: {
+                computed: 'computeProgressClass(device_data.status.progress)'
+            },
+            deviceOffline: {
+                computed: 'computeDeviceOffline(device_data.status.offline)'
+            }
+        },
+        observers: ['setDeviceType(device_data.type)'],
+        ready: function () {
+            // this.$.loginDialog.open();
+            this.computeUserDataPath();
+        },
+        setDeviceType: function () {
+            if (this.device_data && this.device_data.type) {
+                switch (this.device_data.type) {
+                    case "booleanSwitch": 
+                        this.set('isBooleanSwitch', true);
+                        break;
+                }
+            }
+         },
+        computeUserDataPath: function () {
+            console.log(firebase.auth());
+            if (firebase.auth().currentUser) {
+                this.userUID = firebase.auth().currentUser.uid;
+                console.log("/userData/"+this.userUID);
+                return;
+            } else {
+                return this.async(function () {this.computeUserDataPath();}, 30);
+            }
+        },
+        computeProgressClass: function (progress) {
+            if (progress == 100) {
+                return "noProgress";
+            }
+            return "progress";
+        },
+        computeDeviceOffline: function (offline) {
+            if (offline) {
+                return true;
+            }
+            return false;
+        },
+        updateDevicesArray: function () {
+            console.log(this.userData);
+            var devicesArray = [];
+            for (var device in this.userData.devices) {
+                var deviceData = this.userData.devices[device];
+                deviceData.key = device;
+                devicesArray.push(deviceData);
+            }
+            return devicesArray;
+        },
+        computeDeviceDocID: function (deviceKey) {
+            console.log('computeDeviceDocID');
+            return "device_"+deviceKey;
+        },
+        
+        // logIn: function () {
+        //     this.$.passwordInput.invalid = false;
+        //     this.$.emailInput.invalid = false;
+        //     // var ref = new Firebase("https://project-144304397906764068.firebaseio.com/");
+        //     firebase.auth().signInWithEmailAndPassword(this.emailAddress, this.password).then(function () {
+        //         console.log("signed in!")
+        //         this.headerClass = "goodToGo";
+        //         this.async(function () {window.location.href = "../home"}, 500)
+        //     }.bind(this)).catch(function(error) {
+        //       // Handle Errors here.
+        //       var errorCode = error.code;
+        //       var errorMessage = error.message;
+        //       console.log(error);
+        //       // [START_EXCLUDE]
+        //       if (errorCode === 'auth/wrong-password') {
+        //         this.$.passwordInput.invalid = true;
+        //         this.$.passwordInput.errorMessage = "Incorrect Password"
+        //       } else if (errorCode === "auth/user-not-found"){
+        //         this.$.emailInput.invalid = true;
+        //         this.$.emailInput.errorMessage = "Invalid Email Address"
+        //       } else {
+        //         console.error(error);
+        //       }
+        //       // [END_EXCLUDE]
+        //     }.bind(this));
+        // },
+    });
+</script>
